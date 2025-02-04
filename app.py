@@ -4,9 +4,9 @@ import numpy as np
 import gdown
 import os
 
-file_id = "1ul48DKkfWPWns9WBkXweNudFW7POCKf9"
-url = 'https://drive.google.com/file/d/1ul48DKkfWPWns9WBkXweNudFW7POCKf9/view?usp=drive_link'
-model_path = "Train_potato_disease_model.keras"
+file_id = "1_9Q28QeJXnyRCH18IVxpX5KhuDtZC40c"
+url = 'https://drive.google.com/uc?id=1_9Q28QeJXnyRCH18IVxpX5KhuDtZC40c'
+model_path = "trained_plant_disease_model.keras"
 
 
 if not os.path.exists(model_path):
@@ -14,7 +14,7 @@ if not os.path.exists(model_path):
     gdown.download(url, model_path, quiet=False)
 
 
-model_path = "Train_potato_disease_model.keras"
+model_path = "trained_plant_disease_model.keras"
 def model_prediction(test_image):
     model = tf.keras.models.load_model(model_path)
     image = tf.keras.preprocessing.image.load_img(test_image,target_size=(128,128))
