@@ -4,8 +4,8 @@ import numpy as np
 import gdown
 import os
 
-file_id = "14iK4Otv7S48N7b4ZE0hb0r8IhAzrbijq?"
-url = 'https://drive.google.com/drive/folders/14iK4Otv7S48N7b4ZE0hb0r8IhAzrbijq?'
+file_id = "1ul48DKkfWPWns9WBkXweNudFW7POCKf9"
+url = 'https://drive.google.com/file/d/1ul48DKkfWPWns9WBkXweNudFW7POCKf9/view?usp=drive_link'
 model_path = "Train_plant_disease_model.ipynb"
 
 
