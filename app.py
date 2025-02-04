@@ -4,8 +4,8 @@ import numpy as np
 import gdown
 import os
 
-file_id = "1CQ9ilA3MJnSGYwpvs7ybhnERI0vuEjfo/view?"
-url = 'https://drive.google.com/file/d/1CQ9ilA3MJnSGYwpvs7ybhnERI0vuEjfo/view?usp=drive_link'
+file_id = "1ul48DKkfWPWns9WBkXweNudFW7POCKf9"
+url = 'https://drive.google.com/file/d/1ul48DKkfWPWns9WBkXweNudFW7POCKf9/view?usp=drive_link'
 model_path = "Train_plant_disease_model.ipynb"
 
 
@@ -14,7 +14,7 @@ if not os.path.exists(model_path):
     gdown.download(url, model_path, quiet=False)
 
 
-model_path = "Train_potato_disease.ipynb"
+model_path = "trained_plant_disease_model.keras"
 def model_prediction(test_image):
     model = tf.keras.models.load_model(model_path)
     image = tf.keras.preprocessing.image.load_img(test_image,target_size=(128,128))
@@ -54,3 +54,6 @@ elif(app_mode=="DISEASE RECOGNITION"):
         #Reading Labels
         class_name = ['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']
         st.success("Model is Predicting it's a {}".format(class_name[result_index]))
+
+
+
