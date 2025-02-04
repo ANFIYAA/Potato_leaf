@@ -6,7 +6,7 @@ import os
 
 file_id = "1ul48DKkfWPWns9WBkXweNudFW7POCKf9"
 url = 'https://drive.google.com/file/d/1ul48DKkfWPWns9WBkXweNudFW7POCKf9/view?usp=drive_link'
-model_path = "Train_plant_disease_model.ipynb"
+model_path = "Train_potato_disease_model.keras"
 
 
 if not os.path.exists(model_path):
