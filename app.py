@@ -3,57 +3,66 @@ import tensorflow as tf
 import numpy as np
 import gdown
 import os
+from PIL import Image
 
+# ✅ Correct Google Drive Link Format
 file_id = "1ul48DKkfWPWns9WBkXweNudFW7POCKf9"
-url = 'https://drive.google.com/file/d/1ul48DKkfWPWns9WBkXweNudFW7POCKf9/view?usp=drive_link'
-model_path = "Train_potato_disease_model.keras"
+url = f"https://drive.google.com/uc?export=download&id={file_id}"
+model_path = "trained_potato_disease_model.keras"
 
-
+# ✅ Download Model If Not Present
 if not os.path.exists(model_path):
     st.warning("Downloading model from Google Drive...")
     gdown.download(url, model_path, quiet=False)
 
-
-model_path = "trained_plant_disease_model.keras"
+# ✅ Prediction Function (Fix Image Handling)
 def model_prediction(test_image):
+    # Load trained model
     model = tf.keras.models.load_model(model_path)
-    image = tf.keras.preprocessing.image.load_img(test_image,target_size=(128,128))
-    input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    input_arr = np.array([input_arr]) #convert single image to batch
+
+    # ✅ Convert FileUploader object to Image
+    image = Image.open(test_image).convert("RGB")
+    image = image.resize((128, 128))  # Resize to model input size
+    input_arr = np.array(image) / 255.0  # Normalize pixel values
+    input_arr = np.expand_dims(input_arr, axis=0)  # Add batch dimension
+
     predictions = model.predict(input_arr)
-    return np.argmax(predictions) #return index of max element
+    return np.argmax(predictions)  # Return predicted class index
 
-#Sidebar
-st.sidebar.title("Plant Disease Detection System for Sustainable Agriculture")
-app_mode = st.sidebar.selectbox("Select Page",["HOME","DISEASE RECOGNITION"])
-#app_mode = st.sidebar.selectbox("Select Page",["Home"," ","Disease Recognition"])
+# ✅ Sidebar Navigation
+st.sidebar.title("Plant Disease Detection System")
+app_mode = st.sidebar.selectbox("Select Page", ["HOME", "DISEASE RECOGNITION"])
 
-# import Image from pillow to open images
-from PIL import Image
+# ✅ Display Header Image
 img = Image.open("Diseases.png")
-
-# display image using streamlit
-# width is used to set the width of an image
 st.image(img)
 
-#Main Page
-if(app_mode=="HOME"):
-    st.markdown("<h1 style='text-align: center;'>Plant Disease Detection System for Sustainable Agriculture", unsafe_allow_html=True)
-    
-#Prediction Page
-elif(app_mode=="DISEASE RECOGNITION"):
-    st.header("Plant Disease Detection System for Sustainable Agriculture")
-    test_image = st.file_uploader("Choose an Image:")
-    if(st.button("Show Image")):
-        st.image(test_image,width=4,use_column_width=True)
-    #Predict button
-    if(st.button("Predict")):
-        st.snow()
-        st.write("Our Prediction")
-        result_index = model_prediction(test_image)
-        #Reading Labels
-        class_name = ['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']
-        st.success("Model is Predicting it's a {}".format(class_name[result_index]))
+# ✅ Home Page
+if app_mode == "HOME":
+    st.markdown("<h1 style='text-align: center;'>Plant Disease Detection System</h1>", unsafe_allow_html=True)
 
+# ✅ Disease Recognition Page
+elif app_mode == "DISEASE RECOGNITION":
+    st.header("Plant Disease Recognition")
 
+    # ✅ File Uploader (Check if image is uploaded)
+    test_image = st.file_uploader("Choose an Image:", type=["jpg", "png", "jpeg"])
 
+    if test_image:
+        st.image(test_image, caption="Uploaded Image", use_column_width=True)
+
+        # ✅ Prediction Button
+        if st.button("Predict"):
+            st.snow()
+            st.write("Making Prediction...")
+
+            # Ensure image is valid before making prediction
+            result_index = model_prediction(test_image)
+
+            # ✅ Class Labels
+            class_name = ['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']
+
+            # ✅ Display Result
+            st.success(f"Model predicts: {class_name[result_index]}")
+    else:
+        st.warning("Please upload an image first!")
